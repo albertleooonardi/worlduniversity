@@ -6,13 +6,15 @@ import CountrySearch from "./pages/CountrySearch";
 import CountryFilter from "./pages/CountryFilter";
 import CountryDetail from "./pages/CountryDetail";
 import About from "./pages/About";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="flex h-screen overflow-hidden">
         <Sidebar />
-        <div className="flex-grow overflow-y-auto">
+        <div id="main-content" className="flex-grow overflow-y-auto">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

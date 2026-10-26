@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import useCountries from "../hooks/useCountries";
 import HeroSection from "../components/HeroSection";
 import HistorySection from "../components/HistorySection";
 import ExploreNowSection from "../components/ExploreNowSection";
@@ -11,19 +11,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
-  const [totalOfTheCountries, setTotalOfTheCountries] = useState(0);
-
-  useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const response = await axios.get("https://restcountries.com/v3.1/all");
-        setTotalOfTheCountries(response.data.length);
-      } catch (error) {
-        console.error("Error fetching countries:", error);
-      }
-    };
-    fetchCountries();
-  }, []);
+  const { countries } = useCountries();
+  const totalOfTheCountries = countries.length;
 
   const settings = {
     dots: true,

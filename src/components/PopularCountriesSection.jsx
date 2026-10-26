@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import useCountries from "../hooks/useCountries";
 
 const PopularCountriesSection = () => {
-  const [popularCountries, setPopularCountries] = useState([]);
   const navigate = useNavigate();
+  const { countries } = useCountries();
+  const popularCountries = useMemo(
+    () =>
+      countries
+        .filter((country) => country.population)
+        .sort((a, b) => b.population - a.population)
+        .slice(0, 5),
+    [countries]
+  );
 
-  useEffect(() => {
-    const fetchPopularCountries = async () => {
-      try {
-        const response = await axios.get("https://restcountries.com/v3.1/all");
-        const sortedCountries = response.data
-          .filter((country) => country.population)
-          .sort((a, b) => b.population - a.population);
-        setPopularCountries(sortedCountries.slice(0, 5));
-      } catch (error) {
-        console.error("Error fetching popular countries:", error);
-      }
-    };
-    fetchPopularCountries();
-  }, []);
-
-  const handleCountryClick = (countryName) => {
-    navigate(`/country/${countryName.toLowerCase()}`);
+  const handleCountryClick = (slug) => {
+    navigate(`/country/${slug}`);
   };
 
   return (
@@ -34,7 +27,7 @@ const PopularCountriesSection = () => {
         {popularCountries.map((country, index) => (
           <div
             key={country.cca3}
-            onClick={() => handleCountryClick(country.name.common)}
+            onClick={() => handleCountryClick(country.slug)}
             className="flex flex-col md:flex-row items-center justify-between p-4 bg-gray-100 rounded-lg shadow-md cursor-pointer hover:bg-gray-200 transition duration-200"
           >
             <div className="flex items-center">
